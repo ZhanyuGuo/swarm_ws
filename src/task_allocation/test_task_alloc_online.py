@@ -17,13 +17,17 @@ def generate_tasks(num_task, min_pos, max_pos, height):
 
 
 # global variable
-num_task = 12
-num_robots = 3
+# num_task = 12
+num_robots = 4
 max_pose = 10
 min_pos = -10
+
 # task_list = generate_tasks(num_task, min_pos, max_pose, 20)  # randomly generate tasks
-task_list = [(-9, -9, 20), (-9, 9, 20), (9, -9, 20), (9, 9, 20), (-4, -4, 20), (4, -4, 20), (-4, 4, 20), (4, 4, 20),
-             (0, 10, 20), (10, 0, 20), (0, -10, 20), (-10, 0, 20)]
+# task_list = [(-9, -9, 20), (-9, 9, 20), (9, -9, 20), (9, 9, 20), (-4, -4, 20), (4, -4, 20),
+#              (-4, 4, 20), (4, 4, 20), (0, 10, 20), (10, 0, 20), (0, -10, 20), (-10, 0, 20)]
+task_list = [(10, -7, 0.5), (11, 6, 0.7), (7, 9, 0.2), (4, -13, 0.5), (-10, -8, 0.3), (-10, 8, 0.3), (-7, -0.5, 0.2)]
+num_task = len(task_list)
+
 # using 1 and 0 to represent true or false
 task_status = np.zeros(len(task_list))  # recording finished tasks
 robot_curr_task_id = np.empty(num_robots)  # records which task is currently working on
@@ -39,7 +43,14 @@ robot_pos = np.empty((num_robots, 3))
 curr_task_pub0 = rospy.Publisher('/uav0_curr_task', PoseStamped, queue_size=1)  # publish waypoint pos
 curr_task_pub1 = rospy.Publisher('/uav1_curr_task', PoseStamped, queue_size=1)  # publish waypoint pos
 curr_task_pub2 = rospy.Publisher('/uav2_curr_task', PoseStamped, queue_size=1)  # publish waypoint pos
-curr_task_pub = [curr_task_pub0, curr_task_pub1, curr_task_pub2]
+curr_task_pub3 = rospy.Publisher('/uav3_curr_task', PoseStamped, queue_size=1)  # publish waypoint pos
+curr_task_pub = [curr_task_pub0, curr_task_pub1, curr_task_pub2, curr_task_pub3]
+
+ego_curr_task_pub0 = rospy.Publisher('/move_base_simple/goal_0', PoseStamped, queue_size=1)  # publish waypoint pos
+ego_curr_task_pub1 = rospy.Publisher('/move_base_simple/goal_1', PoseStamped, queue_size=1)  # publish waypoint pos
+ego_curr_task_pub2 = rospy.Publisher('/move_base_simple/goal_2', PoseStamped, queue_size=1)  # publish waypoint pos
+ego_curr_task_pub3 = rospy.Publisher('/move_base_simple/goal_3', PoseStamped, queue_size=1)  # publish waypoint pos  #here1
+ego_curr_task_pub = [ego_curr_task_pub0, ego_curr_task_pub1, ego_curr_task_pub2, ego_curr_task_pub3]  # here2
 
 'publisher for mission completion'
 mission_complete_pub = rospy.Publisher('/mission_bool', Bool, queue_size=1)
@@ -112,22 +123,36 @@ def status_callback2(data):
         task_done[2] = 1
 
 
+def status_callback3(data):
+    # rospy.loginfo('robot 2 idling: '+str(data))
+    if data.data:
+        rospy.loginfo("received robot 3 idling")
+        global task_done
+        task_done[3] = 1
+
+
 def robot0_pos_callback(msg):
-    robot_pos[0][0] = msg.pose.position.x
-    robot_pos[0][1] = msg.pose.position.y
-    robot_pos[0][2] = msg.pose.position.z
+    robot_pos[0][0] = msg.pose.position.x + 0.0
+    robot_pos[0][1] = msg.pose.position.y + 1.0
+    robot_pos[0][2] = msg.pose.position.z - 0.5
 
 
 def robot1_pos_callback(msg):
-    robot_pos[1][0] = msg.pose.position.x
-    robot_pos[1][1] = msg.pose.position.y
-    robot_pos[1][2] = msg.pose.position.z
+    robot_pos[1][0] = msg.pose.position.x + 0.0
+    robot_pos[1][1] = msg.pose.position.y - 1.0
+    robot_pos[1][2] = msg.pose.position.z - 0.5
 
 
 def robot2_pos_callback(msg):
-    robot_pos[2][0] = msg.pose.position.x
-    robot_pos[2][1] = msg.pose.position.y
-    robot_pos[2][2] = msg.pose.position.z
+    robot_pos[2][0] = msg.pose.position.x + 0.0
+    robot_pos[2][1] = msg.pose.position.y + 1.0
+    robot_pos[2][2] = msg.pose.position.z - 0.5
+
+
+def robot3_pos_callback(msg):  # here4
+    robot_pos[3][0] = msg.pose.position.x + 2.0
+    robot_pos[3][1] = msg.pose.position.y - 1.0
+    robot_pos[3][2] = msg.pose.position.z - 0.5
 
 
 def publish_task_position(curr_task_pub0, pos):
@@ -150,28 +175,26 @@ if __name__ == '__main__':
         robot_status_sub0 = rospy.Subscriber('/uav0_task_bool', Bool, status_callback0)  # sub to robot's done with task
         robot_status_sub1 = rospy.Subscriber('/uav1_task_bool', Bool, status_callback1)
         robot_status_sub2 = rospy.Subscriber('/uav2_task_bool', Bool, status_callback2)
+        robot_status_sub3 = rospy.Subscriber('/uav3_task_bool', Bool, status_callback3)
 
         'subscriber for robots position'
-        robot_pos_sub0 = rospy.Subscriber('uav0/mavros/local_position/pose',
-                                              PoseStamped,
-                                              robot0_pos_callback)
-        robot_pos_sub1 = rospy.Subscriber('uav1/mavros/local_position/pose',
-                                         PoseStamped,
-                                         robot1_pos_callback)
-        robot_pos_sub2 = rospy.Subscriber('uav2/mavros/local_position/pose',
-                                         PoseStamped,
-                                         robot2_pos_callback)
+        robot_pos_sub0 = rospy.Subscriber('uav0/mavros/local_position/pose', PoseStamped, robot0_pos_callback)
+        robot_pos_sub1 = rospy.Subscriber('uav1/mavros/local_position/pose', PoseStamped, robot1_pos_callback)
+        robot_pos_sub2 = rospy.Subscriber('uav2/mavros/local_position/pose', PoseStamped, robot2_pos_callback)
+        robot_pos_sub3 = rospy.Subscriber('uav3/mavros/local_position/pose', PoseStamped, robot3_pos_callback)
 
         rate = rospy.Rate(3)
         rospy.sleep(3)
-        rospy.loginfo("planning now, robot pose:"+str(robot_pos))
+        rospy.loginfo("planning now, robot pose:" + str(robot_pos))
         rospy.sleep(1)
+
         # initially assign tasks to each robot
         for n in range(num_robots):
             curr_task_id, curr_task, no_task = online_task_assign(robot_pos[n], task_list, task_status)
             robot_curr_task_id[n] = int(curr_task_id)
             task_status[curr_task_id] = 1
             publish_task_position(curr_task_pub[n], curr_task)
+            publish_task_position(ego_curr_task_pub[n], curr_task)
             task_done[n] = 0
             task_count += 1
         rospy.loginfo("task assignments finished! starting mission")
@@ -187,6 +210,7 @@ if __name__ == '__main__':
                         robot_curr_task_id[i] = curr_task_id
                         task_status[int(robot_curr_task_id[i])] = 1
                         publish_task_position(curr_task_pub[i], curr_task)
+                        publish_task_position(ego_curr_task_pub[i], curr_task)
                         task_done[i] = 0
                         task_count += 1
 
@@ -195,10 +219,10 @@ if __name__ == '__main__':
                 tf = 10
                 while tf > 0:  # wait to shutdown node
                     mission_complete_pub.publish(True)
-                    rospy.loginfo("Mission accomplished! Terminating the node in "+str(tf))
+                    rospy.loginfo("Mission accomplished! Terminating the node in " + str(tf))
                     tf -= 1
                     rospy.sleep(1)
-                rospy.loginfo("Number of tasks completed: "+str(task_count))
+                rospy.loginfo("Number of tasks completed: " + str(task_count))
                 break
 
             rate.sleep()
