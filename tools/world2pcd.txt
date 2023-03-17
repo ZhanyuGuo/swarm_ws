@@ -1,0 +1,36 @@
+reference: https://stackoverflow.com/questions/62903784/how-to-convert-a-gazebo-world-to-a-point-cloud
+
+1. follow the reference, notice to change the path in `world2dae.py`. 
+
+might need to install collada if `ModuleNotFoundError: No module named 'collada'`
+
+```bash
+pip install pycollada
+```
+
+2. then we get `.bt` from `.world`.
+
+3. install octomap: https://github.com/OctoMap/octomap
+
+4. cd bin/ and then https://github.com/introlab/rtabmap_ros/issues/452
+
+```bash
+octree2pointcloud ~/catkin_ws/mapfile.bt cloud.pcd
+pcl_viewer cloud.pcd
+```
+
+5. then is how to load pcd into ros.
+
+gazebo + PX4
+
+1. world2pcd
+
+2. pcd2pointcloud
+
+3. rosrun pcl_ros pcd_to_pointcloud baylands.pcd _frame_id:=world 0.5
+
+有问题:
+1. 不同dae的单位不同, 但gazebo对其进行了转换, 所以我们也要作出更gazebo一样的转换才能合并多个dae.
+
+2. 该方法只能解决有dae文件的模型, 对其他模型无能为力.
+
