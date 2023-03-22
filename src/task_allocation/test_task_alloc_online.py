@@ -39,21 +39,21 @@ task_count = 0
 
 robot_pos = np.empty((num_robots, 3))
 
-'publisher for tasks'
-curr_task_pub0 = rospy.Publisher('/uav0_curr_task', PoseStamped, queue_size=1)  # publish waypoint pos
-curr_task_pub1 = rospy.Publisher('/uav1_curr_task', PoseStamped, queue_size=1)  # publish waypoint pos
-curr_task_pub2 = rospy.Publisher('/uav2_curr_task', PoseStamped, queue_size=1)  # publish waypoint pos
-curr_task_pub3 = rospy.Publisher('/uav3_curr_task', PoseStamped, queue_size=1)  # publish waypoint pos
+"publisher for tasks"
+curr_task_pub0 = rospy.Publisher("/uav0_curr_task", PoseStamped, queue_size=1)  # publish waypoint pos
+curr_task_pub1 = rospy.Publisher("/uav1_curr_task", PoseStamped, queue_size=1)  # publish waypoint pos
+curr_task_pub2 = rospy.Publisher("/uav2_curr_task", PoseStamped, queue_size=1)  # publish waypoint pos
+curr_task_pub3 = rospy.Publisher("/uav3_curr_task", PoseStamped, queue_size=1)  # publish waypoint pos
 curr_task_pub = [curr_task_pub0, curr_task_pub1, curr_task_pub2, curr_task_pub3]
 
-ego_curr_task_pub0 = rospy.Publisher('/move_base_simple/goal_0', PoseStamped, queue_size=1)  # publish waypoint pos
-ego_curr_task_pub1 = rospy.Publisher('/move_base_simple/goal_1', PoseStamped, queue_size=1)  # publish waypoint pos
-ego_curr_task_pub2 = rospy.Publisher('/move_base_simple/goal_2', PoseStamped, queue_size=1)  # publish waypoint pos
-ego_curr_task_pub3 = rospy.Publisher('/move_base_simple/goal_3', PoseStamped, queue_size=1)  # publish waypoint pos  #here1
+ego_curr_task_pub0 = rospy.Publisher("/move_base_simple/goal_0", PoseStamped, queue_size=1)  # publish waypoint pos
+ego_curr_task_pub1 = rospy.Publisher("/move_base_simple/goal_1", PoseStamped, queue_size=1)  # publish waypoint pos
+ego_curr_task_pub2 = rospy.Publisher("/move_base_simple/goal_2", PoseStamped, queue_size=1)  # publish waypoint pos
+ego_curr_task_pub3 = rospy.Publisher("/move_base_simple/goal_3", PoseStamped, queue_size=1)  # publish waypoint pos  #here1
 ego_curr_task_pub = [ego_curr_task_pub0, ego_curr_task_pub1, ego_curr_task_pub2, ego_curr_task_pub3]  # here2
 
-'publisher for mission completion'
-mission_complete_pub = rospy.Publisher('/mission_bool', Bool, queue_size=1)
+"publisher for mission completion"
+mission_complete_pub = rospy.Publisher("/mission_bool", Bool, queue_size=1)
 
 
 def assign_tasks(_n_robot, r_pos, _tasks):
@@ -162,26 +162,26 @@ def publish_task_position(curr_task_pub0, pos):
     waypoint.pose.position.y = pos[1]
     waypoint.pose.position.z = pos[2]
     curr_task_pub0.publish(waypoint)
-    rospy.loginfo('current task position {}'.format(pos))
+    rospy.loginfo("current task position {}".format(pos))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     try:
-        rospy.init_node('master_online_task_alloc_node', anonymous=True)
+        rospy.init_node("master_online_task_alloc_node", anonymous=True)
 
         # TODO: wait for service from robots to confirm they are ready for tasks
 
-        'subscriber for task completion'
-        robot_status_sub0 = rospy.Subscriber('/uav0_task_bool', Bool, status_callback0)  # sub to robot's done with task
-        robot_status_sub1 = rospy.Subscriber('/uav1_task_bool', Bool, status_callback1)
-        robot_status_sub2 = rospy.Subscriber('/uav2_task_bool', Bool, status_callback2)
-        robot_status_sub3 = rospy.Subscriber('/uav3_task_bool', Bool, status_callback3)
+        "subscriber for task completion"
+        robot_status_sub0 = rospy.Subscriber("/uav0_task_bool", Bool, status_callback0)  # sub to robot's done with task
+        robot_status_sub1 = rospy.Subscriber("/uav1_task_bool", Bool, status_callback1)
+        robot_status_sub2 = rospy.Subscriber("/uav2_task_bool", Bool, status_callback2)
+        robot_status_sub3 = rospy.Subscriber("/uav3_task_bool", Bool, status_callback3)
 
-        'subscriber for robots position'
-        robot_pos_sub0 = rospy.Subscriber('uav0/mavros/local_position/pose', PoseStamped, robot0_pos_callback)
-        robot_pos_sub1 = rospy.Subscriber('uav1/mavros/local_position/pose', PoseStamped, robot1_pos_callback)
-        robot_pos_sub2 = rospy.Subscriber('uav2/mavros/local_position/pose', PoseStamped, robot2_pos_callback)
-        robot_pos_sub3 = rospy.Subscriber('uav3/mavros/local_position/pose', PoseStamped, robot3_pos_callback)
+        "subscriber for robots position"
+        robot_pos_sub0 = rospy.Subscriber("uav0/mavros/local_position/pose", PoseStamped, robot0_pos_callback)
+        robot_pos_sub1 = rospy.Subscriber("uav1/mavros/local_position/pose", PoseStamped, robot1_pos_callback)
+        robot_pos_sub2 = rospy.Subscriber("uav2/mavros/local_position/pose", PoseStamped, robot2_pos_callback)
+        robot_pos_sub3 = rospy.Subscriber("uav3/mavros/local_position/pose", PoseStamped, robot3_pos_callback)
 
         rate = rospy.Rate(3)
         rospy.sleep(3)
