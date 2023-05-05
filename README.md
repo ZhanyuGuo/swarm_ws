@@ -16,7 +16,9 @@
 
 2. `ego-planner-swarm`
    
-   1. 编译问题看issue[#9](https://github.com/ZJU-FAST-Lab/ego-planner-swarm/issues/9).
+   1. 如果使用ZhanyuGuo的fork的master分支，则已经修复该问题.
+
+   2. 否则，编译问题看issue[#9](https://github.com/ZJU-FAST-Lab/ego-planner-swarm/issues/9).
 
 3. `swarm_ws`
    
@@ -34,6 +36,4 @@
 
 4. `init_multi_uav.sh`.
     
-    等待无人机起飞完毕(这步耗时较久)，然后运行
-
-5. `task_allocation.sh`
+5. `task_allocation.sh`.

@@ -1,3 +1,5 @@
+__pycache__/
+.catkin_workspace
 src/CMakeLists.txt
 devel/
 logs/
@@ -35,6 +37,7 @@ CMakeLists.txt.user
 
 srv/_*.py
 *.pcd
+!assets/*.pcd
 *.pyc
 qtcreator-*
 *.user

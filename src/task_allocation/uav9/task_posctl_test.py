@@ -37,7 +37,7 @@ class MavrosOffboardPosctlTest(MavrosTestCommon):
 
         self.radius = 1
 
-        self.init_x = 0
+        self.init_x = -1
         self.init_y = 0
         self.init_z = -0.5
         self.height = 1
@@ -48,15 +48,15 @@ class MavrosOffboardPosctlTest(MavrosTestCommon):
         self.idling = False
 
         # publishers
-        # self.pos_setpoint_pub = rospy.Publisher('/uav1/mavros/setpoint_position/local', PoseStamped, queue_size=1)
-        self.raw_setpoint_pub = rospy.Publisher('/uav1/mavros/setpoint_raw/local', PositionTarget, queue_size=1)
-        self.idle_pub = rospy.Publisher('/uav1_task_bool', Bool, queue_size=1)
+        # self.pos_setpoint_pub = rospy.Publisher('/uav9/mavros/setpoint_position/local', PoseStamped, queue_size=1)
+        self.raw_setpoint_pub = rospy.Publisher('/uav9/mavros/setpoint_raw/local', PositionTarget, queue_size=1)
+        self.idle_pub = rospy.Publisher('/uav9_task_bool', Bool, queue_size=1)
 
         # subscribers
         self.mission_done_sub = rospy.Subscriber('/mission_bool', Bool, self.mission_done_callback)
-        self.task_pos_sub = rospy.Subscriber('/uav1_curr_task', PoseStamped, self.task_pos_callback)
-        # self.uav1_pos_sub = rospy.Subscriber('/uav1/mavros/local_position/pose', PoseStamped, self.pos_callback)
-        self.raw_setpoint_sub = rospy.Subscriber('/uav1/mavros/setpoint_raw/bridge', PositionTarget, self.raw_callback)
+        self.task_pos_sub = rospy.Subscriber('/uav9_curr_task', PoseStamped, self.task_pos_callback)
+        # self.uav9_pos_sub = rospy.Subscriber('/uav9/mavros/local_position/pose', PoseStamped, self.pos_callback)
+        self.raw_setpoint_sub = rospy.Subscriber('/uav9/mavros/setpoint_raw/bridge', PositionTarget, self.raw_callback)
 
         # send setpoints in seperate thread to better prevent failsafe
         self.pos_thread = Thread(target=self.send_pos, args=())
@@ -233,7 +233,7 @@ class MavrosOffboardPosctlTest(MavrosTestCommon):
 if __name__ == '__main__':
     try:
         import rostest
-        rospy.init_node('test_uav1_node', anonymous=True)
+        rospy.init_node('test_uav9_node', anonymous=True)
 
         rostest.rosrun(PKG, 'mavros_offboard_posctl_test', MavrosOffboardPosctlTest)
     except rospy.ROSInterruptException:

@@ -37,7 +37,7 @@ class MavrosOffboardPosctlTest(MavrosTestCommon):
 
         self.radius = 1
 
-        self.init_x = 2
+        self.init_x = 0
         self.init_y = 1
         self.init_z = -0.5
         self.height = 1
