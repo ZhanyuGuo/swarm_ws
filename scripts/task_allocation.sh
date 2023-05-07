@@ -1,3 +1,2 @@
 #!/bin/sh
-# python /home/gzy/Workspace/swarm_ws/src/task_allocation/test_task_alloc_offline.py
-python /home/gzy/Workspace/swarm_ws/src/task_allocation/test_task_alloc_online.py
+python ../src/task_allocation/test_task_alloc_online.py

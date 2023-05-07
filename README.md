@@ -13,7 +13,7 @@
    
    4. 将`./assets/outdoor.world`复制到`./PX4-Autopilot/Tools/simulation/gazebo-classic/sitl_gazebo-classic/worlds`.
    
-   5. 将`./assets/outdoor.pcd`复制到`~/`.
+   5. ~~将`./assets/outdoor.pcd`复制到`~/`~~.
    
    6. 将`./assets/models/`里的文件复制到`.gazebo/models/`中.
 
@@ -32,6 +32,7 @@
 按以下顺序，在`./swarm/scripts/`路径下依次运行.
 
 1. `px4.sh`.
+   1. 第一次运行可能需要将launch文件中的无人机都注释掉，保证gazebo正常启动.
 
 2. `swarm.sh`.
 

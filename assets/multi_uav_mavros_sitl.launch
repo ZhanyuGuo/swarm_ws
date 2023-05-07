@@ -3,8 +3,8 @@
     <!-- MAVROS posix SITL environment launch script -->
     <!-- launches Gazebo environment and 2x: MAVROS, PX4 SITL, and spawns vehicle -->
     <!-- vehicle model and world -->
-    <arg name="est" default="ekf2" />
-    <arg name="vehicle" default="iris" />
+    <!-- <arg name="est" default="ekf2" /> -->
+    <!-- <arg name="vehicle" default="iris" /> -->
 
     <!-- <arg name="world" default="$(find mavlink_sitl_gazebo)/worlds/empty.world"/> -->
     <arg name="world" default="$(find mavlink_sitl_gazebo)/worlds/outdoor.world" />
@@ -33,11 +33,11 @@
         <include file="$(find px4)/launch/single_vehicle_spawn.launch">
             <arg name="x" value="0" />
             <arg name="y" value="-1" />
-            <arg name="z" value="-0.5" />
+            <arg name="z" value="0" />
             <arg name="R" value="0" />
             <arg name="P" value="0" />
             <arg name="Y" value="0" />
-            <arg name="vehicle" value="$(arg vehicle)" />
+            <!-- <arg name="vehicle" value="$(arg vehicle)" /> -->
             <arg name="mavlink_udp_port" value="$(eval 14560 + arg('ID'))" />
             <arg name="mavlink_tcp_port" value="$(eval 4560 + arg('ID'))" />
             <arg name="ID" value="$(arg ID)" />
@@ -63,11 +63,11 @@
         <include file="$(find px4)/launch/single_vehicle_spawn.launch">
             <arg name="x" value="0" />
             <arg name="y" value="0" />
-            <arg name="z" value="-0.5" />
+            <arg name="z" value="0" />
             <arg name="R" value="0" />
             <arg name="P" value="0" />
             <arg name="Y" value="0" />
-            <arg name="vehicle" value="$(arg vehicle)" />
+            <!-- <arg name="vehicle" value="$(arg vehicle)" /> -->
             <arg name="mavlink_udp_port" value="$(eval 14560 + arg('ID'))" />
             <arg name="mavlink_tcp_port" value="$(eval 4560 + arg('ID'))" />
             <arg name="ID" value="$(arg ID)" />
@@ -93,11 +93,11 @@
         <include file="$(find px4)/launch/single_vehicle_spawn.launch">
             <arg name="x" value="0" />
             <arg name="y" value="1" />
-            <arg name="z" value="-0.5" />
+            <arg name="z" value="0" />
             <arg name="R" value="0" />
             <arg name="P" value="0" />
             <arg name="Y" value="0" />
-            <arg name="vehicle" value="$(arg vehicle)" />
+            <!-- <arg name="vehicle" value="$(arg vehicle)" /> -->
             <arg name="mavlink_udp_port" value="$(eval 14560 + arg('ID'))" />
             <arg name="mavlink_tcp_port" value="$(eval 4560 + arg('ID'))" />
             <arg name="ID" value="$(arg ID)" />
@@ -123,11 +123,11 @@
         <include file="$(find px4)/launch/single_vehicle_spawn.launch">
             <arg name="x" value="1" />
             <arg name="y" value="-1" />
-            <arg name="z" value="-0.5" />
+            <arg name="z" value="0" />
             <arg name="R" value="0" />
             <arg name="P" value="0" />
             <arg name="Y" value="0" />
-            <arg name="vehicle" value="$(arg vehicle)" />
+            <!-- <arg name="vehicle" value="$(arg vehicle)" /> -->
             <arg name="mavlink_udp_port" value="$(eval 14560 + arg('ID'))" />
             <arg name="mavlink_tcp_port" value="$(eval 4560 + arg('ID'))" />
             <arg name="ID" value="$(arg ID)" />
@@ -153,11 +153,11 @@
         <include file="$(find px4)/launch/single_vehicle_spawn.launch">
             <arg name="x" value="1" />
             <arg name="y" value="0" />
-            <arg name="z" value="-0.5" />
+            <arg name="z" value="0" />
             <arg name="R" value="0" />
             <arg name="P" value="0" />
             <arg name="Y" value="0" />
-            <arg name="vehicle" value="$(arg vehicle)" />
+            <!-- <arg name="vehicle" value="$(arg vehicle)" /> -->
             <arg name="mavlink_udp_port" value="$(eval 14560 + arg('ID'))" />
             <arg name="mavlink_tcp_port" value="$(eval 4560 + arg('ID'))" />
             <arg name="ID" value="$(arg ID)" />
@@ -183,11 +183,11 @@
         <include file="$(find px4)/launch/single_vehicle_spawn.launch">
             <arg name="x" value="1" />
             <arg name="y" value="1" />
-            <arg name="z" value="-0.5" />
+            <arg name="z" value="0" />
             <arg name="R" value="0" />
             <arg name="P" value="0" />
             <arg name="Y" value="0" />
-            <arg name="vehicle" value="$(arg vehicle)" />
+            <!-- <arg name="vehicle" value="$(arg vehicle)" /> -->
             <arg name="mavlink_udp_port" value="$(eval 14560 + arg('ID'))" />
             <arg name="mavlink_tcp_port" value="$(eval 4560 + arg('ID'))" />
             <arg name="ID" value="$(arg ID)" />
@@ -213,11 +213,11 @@
         <include file="$(find px4)/launch/single_vehicle_spawn.launch">
             <arg name="x" value="2" />
             <arg name="y" value="-1" />
-            <arg name="z" value="-0.5" />
+            <arg name="z" value="0" />
             <arg name="R" value="0" />
             <arg name="P" value="0" />
             <arg name="Y" value="0" />
-            <arg name="vehicle" value="$(arg vehicle)" />
+            <!-- <arg name="vehicle" value="$(arg vehicle)" /> -->
             <arg name="mavlink_udp_port" value="$(eval 14560 + arg('ID'))" />
             <arg name="mavlink_tcp_port" value="$(eval 4560 + arg('ID'))" />
             <arg name="ID" value="$(arg ID)" />
@@ -243,11 +243,11 @@
         <include file="$(find px4)/launch/single_vehicle_spawn.launch">
             <arg name="x" value="2" />
             <arg name="y" value="0" />
-            <arg name="z" value="-0.5" />
+            <arg name="z" value="0" />
             <arg name="R" value="0" />
             <arg name="P" value="0" />
             <arg name="Y" value="0" />
-            <arg name="vehicle" value="$(arg vehicle)" />
+            <!-- <arg name="vehicle" value="$(arg vehicle)" /> -->
             <arg name="mavlink_udp_port" value="$(eval 14560 + arg('ID'))" />
             <arg name="mavlink_tcp_port" value="$(eval 4560 + arg('ID'))" />
             <arg name="ID" value="$(arg ID)" />
@@ -273,11 +273,11 @@
         <include file="$(find px4)/launch/single_vehicle_spawn.launch">
             <arg name="x" value="2" />
             <arg name="y" value="1" />
-            <arg name="z" value="-0.5" />
+            <arg name="z" value="0" />
             <arg name="R" value="0" />
             <arg name="P" value="0" />
             <arg name="Y" value="0" />
-            <arg name="vehicle" value="$(arg vehicle)" />
+            <!-- <arg name="vehicle" value="$(arg vehicle)" /> -->
             <arg name="mavlink_udp_port" value="$(eval 14560 + arg('ID'))" />
             <arg name="mavlink_tcp_port" value="$(eval 4560 + arg('ID'))" />
             <arg name="ID" value="$(arg ID)" />
@@ -303,11 +303,11 @@
         <include file="$(find px4)/launch/single_vehicle_spawn.launch">
             <arg name="x" value="-1" />
             <arg name="y" value="0" />
-            <arg name="z" value="-0.5" />
+            <arg name="z" value="0" />
             <arg name="R" value="0" />
             <arg name="P" value="0" />
             <arg name="Y" value="0" />
-            <arg name="vehicle" value="$(arg vehicle)" />
+            <!-- <arg name="vehicle" value="$(arg vehicle)" /> -->
             <arg name="mavlink_udp_port" value="$(eval 14560 + arg('ID'))" />
             <arg name="mavlink_tcp_port" value="$(eval 4560 + arg('ID'))" />
             <arg name="ID" value="$(arg ID)" />
@@ -323,6 +323,7 @@
             <arg name="tgt_component" value="1" />
         </include>
     </group>
+    <![CDATA[  ]]>
 </launch>
 <!-- to add more UAVs (up to 10):
 Increase the id

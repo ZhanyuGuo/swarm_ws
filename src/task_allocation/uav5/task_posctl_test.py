@@ -9,13 +9,15 @@ from pymavlink import mavutil
 from mavros_test_common import MavrosTestCommon
 
 import rospy
+
 # from tf.transformations import quaternion_from_euler
 from std_msgs.msg import Header, Bool
 from geometry_msgs.msg import PoseStamped
+
 # from geometry_msgs.msg import Quaternion
 from mavros_msgs.msg import PositionTarget
 
-PKG = 'px4'
+PKG = "px4"
 
 
 class MavrosOffboardPosctlTest(MavrosTestCommon):
@@ -39,7 +41,7 @@ class MavrosOffboardPosctlTest(MavrosTestCommon):
 
         self.init_x = 1
         self.init_y = 1
-        self.init_z = -0.5
+        self.init_z = 0
         self.height = 1
 
         self.curr_task_pos = (self.init_x, self.init_y, self.height)
@@ -49,14 +51,14 @@ class MavrosOffboardPosctlTest(MavrosTestCommon):
 
         # publishers
         # self.pos_setpoint_pub = rospy.Publisher('/uav5/mavros/setpoint_position/local', PoseStamped, queue_size=1)
-        self.raw_setpoint_pub = rospy.Publisher('/uav5/mavros/setpoint_raw/local', PositionTarget, queue_size=1)
-        self.idle_pub = rospy.Publisher('/uav5_task_bool', Bool, queue_size=1)
+        self.raw_setpoint_pub = rospy.Publisher("/uav5/mavros/setpoint_raw/local", PositionTarget, queue_size=1)
+        self.idle_pub = rospy.Publisher("/uav5_task_bool", Bool, queue_size=1)
 
         # subscribers
-        self.mission_done_sub = rospy.Subscriber('/mission_bool', Bool, self.mission_done_callback)
-        self.task_pos_sub = rospy.Subscriber('/uav5_curr_task', PoseStamped, self.task_pos_callback)
+        self.mission_done_sub = rospy.Subscriber("/mission_bool", Bool, self.mission_done_callback)
+        self.task_pos_sub = rospy.Subscriber("/uav5_curr_task", PoseStamped, self.task_pos_callback)
         # self.uav5_pos_sub = rospy.Subscriber('/uav5/mavros/local_position/pose', PoseStamped, self.pos_callback)
-        self.raw_setpoint_sub = rospy.Subscriber('/uav5/mavros/setpoint_raw/bridge', PositionTarget, self.raw_callback)
+        self.raw_setpoint_sub = rospy.Subscriber("/uav5/mavros/setpoint_raw/bridge", PositionTarget, self.raw_callback)
 
         # send setpoints in seperate thread to better prevent failsafe
         self.pos_thread = Thread(target=self.send_pos, args=())
@@ -114,13 +116,12 @@ class MavrosOffboardPosctlTest(MavrosTestCommon):
             "current position | x:{0:.2f}, y:{1:.2f}, z:{2:.2f}".format(
                 self.local_position.pose.position.x + self.init_x,
                 self.local_position.pose.position.y + self.init_y,
-                self.local_position.pose.position.z + self.init_z
-            ))
+                self.local_position.pose.position.z + self.init_z,
+            )
+        )
 
         desired = np.array((x, y, z))
-        pos = np.array((self.local_position.pose.position.x,
-                        self.local_position.pose.position.y,
-                        self.local_position.pose.position.z))
+        pos = np.array((self.local_position.pose.position.x, self.local_position.pose.position.y, self.local_position.pose.position.z))
         return np.linalg.norm(desired - pos) < offset
 
     def reach_position(self, x, y, z, timeout):
@@ -130,7 +131,14 @@ class MavrosOffboardPosctlTest(MavrosTestCommon):
         self.pos.position.x = x - self.init_x
         self.pos.position.y = y - self.init_y
         self.pos.position.z = z - self.init_z
-        self.pos.type_mask = PositionTarget.IGNORE_VX | PositionTarget.IGNORE_VY | PositionTarget.IGNORE_VZ | PositionTarget.IGNORE_AFX | PositionTarget.IGNORE_AFY | PositionTarget.IGNORE_AFZ
+        self.pos.type_mask = (
+            PositionTarget.IGNORE_VX
+            | PositionTarget.IGNORE_VY
+            | PositionTarget.IGNORE_VZ
+            | PositionTarget.IGNORE_AFX
+            | PositionTarget.IGNORE_AFY
+            | PositionTarget.IGNORE_AFZ
+        )
         # self.pos.pose.position.x = x - self.init_x
         # self.pos.pose.position.y = y - self.init_y
         # self.pos.pose.position.z = z - self.init_z
@@ -138,11 +146,14 @@ class MavrosOffboardPosctlTest(MavrosTestCommon):
         # NOTE: local to global, add offset
         rospy.loginfo(
             "attempting to reach position | x: {0}, y: {1}, z: {2} | current position x: {3:.2f}, y: {4:.2f}, z: {5:.2f}".format(
-                x, y, z,
+                x,
+                y,
+                z,
                 self.local_position.pose.position.x + self.init_x,
                 self.local_position.pose.position.y + self.init_y,
-                self.local_position.pose.position.z + self.init_z
-            ))
+                self.local_position.pose.position.z + self.init_z,
+            )
+        )
 
         # For demo purposes we will lock yaw/heading to north.
         yaw_degrees = 0  # North
@@ -159,9 +170,7 @@ class MavrosOffboardPosctlTest(MavrosTestCommon):
             # if self.is_at_position(self.pos.pose.position.x,
             #                        self.pos.pose.position.y,
             #                        self.pos.pose.position.z, self.radius):
-            if self.is_at_position(self.pos.position.x,
-                                   self.pos.position.y,
-                                   self.pos.position.z, self.radius):
+            if self.is_at_position(self.pos.position.x, self.pos.position.y, self.pos.position.z, self.radius):
                 rospy.loginfo("position reached | seconds: {0} of {1}".format(i / loop_freq, timeout))
                 self.idling = True
                 self.idle_pub.publish(self.idling)
@@ -173,11 +182,17 @@ class MavrosOffboardPosctlTest(MavrosTestCommon):
             except rospy.ROSException as e:
                 self.fail(e)
 
-        self.assertTrue(reached, (
-            "took too long to get to position | current position x: {0:.2f}, y: {1:.2f}, z: {2:.2f} | timeout(seconds): {3}".
-            format(self.local_position.pose.position.x + self.init_x,
-                   self.local_position.pose.position.y + self.init_y,
-                   self.local_position.pose.position.z + self.init_z, timeout)))
+        self.assertTrue(
+            reached,
+            (
+                "took too long to get to position | current position x: {0:.2f}, y: {1:.2f}, z: {2:.2f} | timeout(seconds): {3}".format(
+                    self.local_position.pose.position.x + self.init_x,
+                    self.local_position.pose.position.y + self.init_y,
+                    self.local_position.pose.position.z + self.init_z,
+                    timeout,
+                )
+            ),
+        )
 
     def check_task(self):
         x = self.curr_task_pos[0]
@@ -208,7 +223,7 @@ class MavrosOffboardPosctlTest(MavrosTestCommon):
 
         while not self.mission_done:
             if self.idling:
-                rospy.loginfo('waiting for next task')
+                rospy.loginfo("waiting for next task")
                 self.check_task()
                 # publish idling
                 self.idle_pub.publish(self.idling)
@@ -216,12 +231,12 @@ class MavrosOffboardPosctlTest(MavrosTestCommon):
             else:
                 # do not need to reach position, task allocation send target to ego-planner and get discrete pose back
                 # self.reach_position(self.curr_task_pos[0], self.curr_task_pos[1], self.curr_task_pos[2], 30)
-                rospy.loginfo('doing task')
+                rospy.loginfo("doing task")
                 self.check_task()
                 self.idle_pub.publish(self.idling)
                 rospy.sleep(1)
             if self.mission_done and self.idling:
-                rospy.loginfo('mission completed! Landing now')
+                rospy.loginfo("mission completed! Landing now")
                 break
 
         self.reach_position(self.init_x, self.init_y, self.height, 30)  # returning to home location
@@ -230,11 +245,12 @@ class MavrosOffboardPosctlTest(MavrosTestCommon):
         self.set_arm(False, 5)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     try:
         import rostest
-        rospy.init_node('test_uav5_node', anonymous=True)
 
-        rostest.rosrun(PKG, 'mavros_offboard_posctl_test', MavrosOffboardPosctlTest)
+        rospy.init_node("test_uav5_node", anonymous=True)
+
+        rostest.rosrun(PKG, "mavros_offboard_posctl_test", MavrosOffboardPosctlTest)
     except rospy.ROSInterruptException:
         pass
