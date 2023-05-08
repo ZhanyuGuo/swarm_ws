@@ -63,8 +63,7 @@
         <param name="fsm/thresh_replan_time" value="1.0" type="double" />
         <param name="fsm/thresh_no_replan_meter" value="1.0" type="double" />
         <param name="fsm/planning_horizon" value="$(arg planning_horizon)" type="double" />
-        <!--always
-    set to 1.5 times grater than sensing horizen-->
+        <!-- always set to 1.5 times grater than sensing horizen-->
         <param name="fsm/planning_horizen_time" value="3" type="double" />
         <param name="fsm/emergency_time" value="1.0" type="double" />
         <param name="fsm/realworld_experiment" value="false" />

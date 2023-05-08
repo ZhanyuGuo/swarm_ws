@@ -301,8 +301,8 @@
         <arg name="fcu_url" default="udp://:14549@localhost:14589" />
         <!-- PX4 SITL and vehicle spawn -->
         <include file="$(find px4)/launch/single_vehicle_spawn.launch">
-            <arg name="x" value="-1" />
-            <arg name="y" value="0" />
+            <arg name="x" value="2" />
+            <arg name="y" value="2" />
             <arg name="z" value="0" />
             <arg name="R" value="0" />
             <arg name="P" value="0" />
@@ -323,7 +323,7 @@
             <arg name="tgt_component" value="1" />
         </include>
     </group>
-    <![CDATA[  ]]>
+    <![CDATA[ ]]>
 </launch>
 <!-- to add more UAVs (up to 10):
 Increase the id
